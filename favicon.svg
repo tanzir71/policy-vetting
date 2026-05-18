@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Bangladesh Policy Vetting">
+  <rect width="64" height="64" rx="16" fill="#ffffff"/>
+  <rect x="8" y="8" width="48" height="48" rx="24" fill="none" stroke="#18181b" stroke-width="2"/>
+  <text x="32" y="38" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="600" fill="#18181b">BV</text>
+</svg>

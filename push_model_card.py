@@ -15,7 +15,7 @@ import sys
 import urllib.error
 import urllib.request
 
-DEFAULT_MODEL_REPO = "tanziro/bd-contract-labor-policy-vetting-qwen25-3b-lora-json-grounded-repair"
+DEFAULT_MODEL_REPO = "tanziro/bd-contract-labor-policy-vetting-qwen25-3b-lora-company-setup-citation-repair"
 
 
 def upload_with_commit_api(repo_id: str, card: str, token: str) -> str:
@@ -86,34 +86,13 @@ def main() -> int:
         return 1
 
     try:
-        from huggingface_hub import create_repo, upload_file
-    except ImportError:
-        try:
-            body = upload_with_commit_api(args.repo_id, args.card, args.token)
-        except Exception as exc:
-            print(str(exc), file=sys.stderr)
-            return 3
-        print(f"OK https://huggingface.co/{args.repo_id}")
-        if body:
-            print(body[:1000])
-        return 0
-
-    create_repo(
-        repo_id=args.repo_id,
-        repo_type="model",
-        private=args.private,
-        exist_ok=True,
-        token=args.token,
-    )
-    upload_file(
-        path_or_fileobj=args.card,
-        path_in_repo="README.md",
-        repo_id=args.repo_id,
-        repo_type="model",
-        token=args.token,
-        commit_message="Update model card",
-    )
+        body = upload_with_commit_api(args.repo_id, args.card, args.token)
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 3
     print(f"OK https://huggingface.co/{args.repo_id}")
+    if body:
+        print(body[:1000])
     return 0
 
 

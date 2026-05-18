@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Bangladesh contract, labor, company setup, and policy vetting pipeline: live-source dataset, Qwen2.5-3B LoRA repair passes, and benchmark-first safety posture."
+    />
+    <meta property="og:title" content="Bangladesh Policy Vetting - source-grounded business compliance assistant" />
+    <meta
+      property="og:description"
+      content="From Bangladesh legal and policy sources to cited SFT rows, Qwen LoRA adapters, benchmark repair loops, and a practical pre-expert exploration assistant."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <title>Bangladesh Policy Vetting - source-grounded business compliance assistant</title>
+  </head>
+  <body>
+    <div class="page-shell">
+      <a class="skip-link" href="#content">Skip to content</a>
+
+      <header class="site-header">
+        <div class="header-inner">
+          <a class="brand" href="./" aria-label="Bangladesh Policy Vetting home">
+            <span class="brand-mark" aria-hidden="true">
+              <span>BV</span>
+            </span>
+            <span class="brand-name">Bangladesh Policy Vetting</span>
+          </a>
+
+          <nav class="nav" aria-label="Primary navigation">
+            <a class="nav-link" href="#pipeline">Pipeline</a>
+            <a class="nav-link" href="#dataset">Dataset</a>
+            <a class="nav-link" href="#model">Model</a>
+            <a class="nav-link" href="#replicate">Replicate</a>
+            <a
+              class="button button-small button-dark"
+              href="https://github.com/tanzir71/policy-vetting"
+              rel="noreferrer"
+              target="_blank"
+            >
+              View repo
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="content">
+        <section class="hero">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <div class="hero-inner">
+            <div class="hero-copy">
+              <p class="status-pill">
+                <span class="mono">v0.9</span>
+                <span>Bangladesh business law &bull; cited SFT &bull; Qwen2.5-3B LoRA</span>
+              </p>
+
+              <h1>A source-grounded policy vetting pipeline for Bangladesh business.</h1>
+              <p class="hero-description">
+                Bangladesh Policy Vetting turns live legal and policy sources into
+                citation-carrying training rows, fine-tunes Qwen LoRA adapters, and
+                keeps the assistant cautious with benchmarked JSON, source, citation,
+                and refusal checks.
+              </p>
+
+              <div class="hero-actions">
+                <a
+                  class="button button-large button-dark"
+                  href="https://huggingface.co/tanziro/bd-contract-labor-policy-vetting-qwen25-3b-lora-company-setup-citation-repair"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  Open model
+                </a>
+                <a
+                  class="button button-large button-light"
+                  href="https://huggingface.co/datasets/tanziro/bd-contract-labor-policy-vetting-live-sft"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  View dataset
+                </a>
+              </div>
+
+              <div class="keyword-list" aria-label="Project keywords">
+                <span>41,646 train rows</span>
+                <span>7,354 validation rows</span>
+                <span>20 task types</span>
+                <span>citation repair adapter</span>
+                <span>9/9 smoke pass</span>
+              </div>
+            </div>
+
+            <div class="hero-panel" aria-label="Pipeline summary">
+              <div class="panel-topline">
+                <span class="dot"></span>
+                <span class="mono">vetting_pipeline.json</span>
+              </div>
+              <svg class="pipeline-art" viewBox="0 0 520 292" role="img" aria-labelledby="pipeline-title pipeline-desc">
+                <title id="pipeline-title">Source to vetting assistant pipeline</title>
+                <desc id="pipeline-desc">
+                  Live Bangladesh sources become cited SFT rows, then Qwen LoRA adapters, then benchmarked repair passes.
+                </desc>
+                <defs>
+                  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M0,0 L8,4 L0,8 Z" fill="#18181b"></path>
+                  </marker>
+                </defs>
+                <rect x="1" y="1" width="518" height="290" rx="8" fill="#ffffff" stroke="#e4e4e7"></rect>
+                <g class="flow-node">
+                  <rect x="34" y="40" width="128" height="54" rx="7"></rect>
+                  <text x="50" y="63">sources</text>
+                  <text x="50" y="81">bdlaws + BEPZA</text>
+                </g>
+                <g class="flow-node">
+                  <rect x="196" y="40" width="128" height="54" rx="7"></rect>
+                  <text x="212" y="63">clean chunks</text>
+                  <text x="212" y="81">filter + dedupe</text>
+                </g>
+                <g class="flow-node">
+                  <rect x="358" y="40" width="128" height="54" rx="7"></rect>
+                  <text x="374" y="63">SFT rows</text>
+                  <text x="374" y="81">citation/refusal</text>
+                </g>
+                <path d="M162 67 H188" class="flow-line"></path>
+                <path d="M324 67 H350" class="flow-line"></path>
+                <path d="M422 94 V128" class="flow-line"></path>
+                <g class="flow-node">
+                  <rect x="358" y="136" width="128" height="54" rx="7"></rect>
+                  <text x="374" y="159">Qwen LoRA</text>
+                  <text x="374" y="177">4-bit QLoRA</text>
+                </g>
+                <path d="M358 163 H332" class="flow-line reverse"></path>
+                <g class="flow-node">
+                  <rect x="196" y="136" width="128" height="54" rx="7"></rect>
+                  <text x="212" y="159">benchmark</text>
+                  <text x="212" y="177">JSON + source</text>
+                </g>
+                <path d="M196 163 H170" class="flow-line reverse"></path>
+                <g class="flow-node">
+                  <rect x="34" y="136" width="128" height="54" rx="7"></rect>
+                  <text x="50" y="159">repair</text>
+                  <text x="50" y="177">targeted passes</text>
+                </g>
+                <path d="M98 190 V222 H422 V198" class="flow-line"></path>
+                <g class="flow-foot">
+                  <text x="38" y="252">current adapter: company-setup-citation-repair</text>
+                  <text x="38" y="272">guardrail: retrieval + citation verification before use</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section class="section metrics-section" aria-label="Project metrics">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <p class="metric-value">48,999</p>
+              <p class="metric-label">published SFT rows</p>
+            </article>
+            <article class="metric-card">
+              <p class="metric-value">1,699</p>
+              <p class="metric-label">live-source chunks</p>
+            </article>
+            <article class="metric-card">
+              <p class="metric-value">20</p>
+              <p class="metric-label">task categories</p>
+            </article>
+            <article class="metric-card">
+              <p class="metric-value">9/9</p>
+              <p class="metric-label">latest smoke benchmark</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="pipeline">
+          <div class="section-heading">
+            <h2>Pipeline</h2>
+            <p>Live source &rarr; manifest &rarr; clean chunks &rarr; cited instruction rows.</p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <h3>Bounded live collection</h3>
+              <p>
+                Collects from Laws of Bangladesh, BEPZA/EPZ policy sources, and
+                procurement-related sources when reachable, with retrieval timestamps
+                and provenance.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>Business-first scope</h3>
+              <p>
+                Covers company setup, contracts, customer policies, labor, EPZ/BEPZA,
+                foreign investment, partnerships, JVs, and expansion pathways.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>Source-task filtering</h3>
+              <p>
+                Rejects major mismatches, such as using payment-instrument excerpts
+                for company setup, refund policy, or disciplinary timeline answers.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>Repair notebooks</h3>
+              <p>
+                Colab notebooks add persistence checks, Drive backups, Hub checkpoints,
+                and smoke probes before accepting a trained adapter.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="dataset">
+          <div class="section-heading split-heading">
+            <div>
+              <h2>Dataset</h2>
+              <p>Published as <span class="mono">tanziro/bd-contract-labor-policy-vetting-live-sft</span>.</p>
+            </div>
+            <a
+              class="button button-medium button-light"
+              href="https://huggingface.co/datasets/tanziro/bd-contract-labor-policy-vetting-live-sft"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Dataset card
+            </a>
+          </div>
+
+          <div class="stack-panel">
+            <dl class="stack-grid stack-grid-three">
+              <div>
+                <dt>Train split</dt>
+                <dd>41,646 rows</dd>
+              </div>
+              <div>
+                <dt>Validation split</dt>
+                <dd>7,354 rows</dd>
+              </div>
+              <div>
+                <dt>Languages</dt>
+                <dd>English + Bangla metadata</dd>
+              </div>
+              <div>
+                <dt>Model family</dt>
+                <dd>Qwen2.5 and Qwen3.5 notebooks</dd>
+              </div>
+              <div>
+                <dt>Sources</dt>
+                <dd>Laws of Bangladesh + BEPZA</dd>
+              </div>
+              <div>
+                <dt>Output style</dt>
+                <dd>JSON with citations and caveats</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="schema-card">
+            <p class="schema-title">Per-row schema</p>
+            <code>instruction, context, reasoning, response, citations, source_title, source_url, source_type, jurisdiction, topic, task_type, confidence, refusal_reason</code>
+          </div>
+        </section>
+
+        <section class="section" id="model">
+          <div class="section-heading split-heading">
+            <div>
+              <h2>Model</h2>
+              <p>Adapter-only LoRA/QLoRA weights for <span class="mono">Qwen/Qwen2.5-3B-Instruct</span>.</p>
+            </div>
+            <a
+              class="button button-medium button-light"
+              href="https://huggingface.co/tanziro/bd-contract-labor-policy-vetting-qwen25-3b-lora-company-setup-citation-repair"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Model card
+            </a>
+          </div>
+
+          <div class="feature-grid model-grid">
+            <article class="feature-card">
+              <h3>Training profile</h3>
+              <p>
+                QLoRA repair run on Qwen2.5-3B-Instruct with compact source-focused
+                curriculum rows and repeated benchmark alignment anchors.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>Repair path</h3>
+              <p>
+                Progressed through JSON grounding, source selection, company setup,
+                and final company setup citation repair adapters.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>Current adapter</h3>
+              <p>
+                <span class="mono">company-setup-citation-repair</span> fixes the
+                last observed issue: setup answers using the right excerpt but
+                leaving citations empty.
+              </p>
+            </article>
+          </div>
+
+          <div class="benchmark-card">
+            <div class="benchmark-header">
+              <p class="benchmark-title">Latest smoke benchmark</p>
+              <p>Company setup citation repair, adapter-only 3B run.</p>
+            </div>
+            <div class="benchmark-table" role="table" aria-label="Latest smoke benchmark results">
+              <div role="row" class="table-row table-head">
+                <span role="columnheader">Audit</span>
+                <span role="columnheader">Score</span>
+                <span role="columnheader">Total</span>
+                <span role="columnheader">Status</span>
+              </div>
+              <div role="row" class="table-row">
+                <span role="cell">valid_json_raw</span>
+                <span role="cell">9</span>
+                <span role="cell">9</span>
+                <span role="cell">pass</span>
+              </div>
+              <div role="row" class="table-row">
+                <span role="cell">has_citations_or_refusal</span>
+                <span role="cell">9</span>
+                <span role="cell">9</span>
+                <span role="cell">pass</span>
+              </div>
+              <div role="row" class="table-row">
+                <span role="cell">bad_source_task_matches</span>
+                <span role="cell">0</span>
+                <span role="cell">9</span>
+                <span role="cell">pass</span>
+              </div>
+              <div role="row" class="table-row">
+                <span role="cell">missing_company_setup_citations</span>
+                <span role="cell">0</span>
+                <span role="cell">9</span>
+                <span role="cell">pass</span>
+              </div>
+              <div role="row" class="table-row table-total">
+                <span role="cell">fallback_used</span>
+                <span role="cell">0</span>
+                <span role="cell">9</span>
+                <span role="cell">clean</span>
+              </div>
+            </div>
+            <p class="benchmark-note">
+              Production use should still verify citations against official sources,
+              run task/source filters, validate JSON, and route final business or
+              legal decisions to qualified Bangladeshi professionals.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="replicate">
+          <div class="section-heading">
+            <h2>Replicate it</h2>
+            <p>A practical route for copying the process or adapting it to another business domain.</p>
+          </div>
+
+          <div class="step-list">
+            <article class="step-card">
+              <span class="step-number">01</span>
+              <div>
+                <h3>Collect live sources</h3>
+                <p>
+                  Run the collector with bounded source counts, preserve URLs,
+                  timestamps, source types, and failure logs.
+                </p>
+              </div>
+            </article>
+            <article class="step-card">
+              <span class="step-number">02</span>
+              <div>
+                <h3>Build cited rows</h3>
+                <p>
+                  Generate JSON-oriented SFT examples with source limits, citations,
+                  missing facts, refusal behavior, and expert handoff language.
+                </p>
+              </div>
+            </article>
+            <article class="step-card">
+              <span class="step-number">03</span>
+              <div>
+                <h3>Train with persistence</h3>
+                <p>
+                  Use Colab notebooks with pre-run persistence checks, Google Drive
+                  checkpoints, and Hugging Face adapter checkpoints.
+                </p>
+              </div>
+            </article>
+            <article class="step-card">
+              <span class="step-number">04</span>
+              <div>
+                <h3>Benchmark before release</h3>
+                <p>
+                  Check JSON validity, citation presence, refusal behavior, source
+                  relevance, company setup grounding, and fallback usage.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="safety">
+          <div class="section-heading">
+            <h2>Safety posture</h2>
+            <p>Business exploration support, never legal advice.</p>
+          </div>
+
+          <div class="contact-card safety-card">
+            <div>
+              <p class="contact-title">The useful part is the restraint.</p>
+              <p class="contact-copy">
+                The assistant is designed to cite supplied sources, refuse unsupported
+                predictions, ask for missing facts, and separate source-supported
+                points from broader checks that need another source or expert review.
+              </p>
+            </div>
+            <a
+              class="button button-medium button-dark"
+              href="https://github.com/tanzir71/policy-vetting"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Read the repo
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <p>Built from the dataset pipeline, training notebooks, model card, and latest benchmark outputs.</p>
+          <div class="footer-links">
+            <a href="https://github.com/tanzir71/policy-vetting" rel="noreferrer" target="_blank">GitHub</a>
+            <a href="https://huggingface.co/tanziro/bd-contract-labor-policy-vetting-qwen25-3b-lora-company-setup-citation-repair" rel="noreferrer" target="_blank">Model</a>
+            <a href="https://huggingface.co/datasets/tanziro/bd-contract-labor-policy-vetting-live-sft" rel="noreferrer" target="_blank">Dataset</a>
+            <a href="#pipeline">Pipeline</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
