@@ -55,19 +55,22 @@ Bangladesh, BEPZA/EPZ policy sources, and procurement-related sources where
 reachable. Rows are instruction-tuning examples built around source excerpts,
 citations, source limits, missing facts, and expert handoff language.
 
-## Behavior
+## Benchmark Results
 
-The target behavior is:
+Two owner-run notebook benchmarks were used to judge the adapter.
 
-- return JSON-style, source-grounded answers where requested
-- cite the supplied source rather than inventing statutory details
-- separate what the excerpt supports from broader checks requiring another source
-- ask for missing facts before applying law to a real business decision
-- refuse or narrow requests that ask for predictions about courts, regulators, approvals, or outcomes
-- avoid treating EPZ and non-EPZ labor rules as interchangeable
-- avoid treating refund, warranty, service, privacy, or complaint exclusions as enforceable merely because a company writes them
+The first run showed that the model had learned some Bangladesh-specific
+vocabulary and JSON shapes, but it was not reliable enough for a demo:
 
-Recent smoke-test behavior from the notebook:
+- valid JSON was only `3 / 8`
+- disclaimer/refusal behavior appeared in only `2 / 8`
+- several generations were truncated or malformed
+- company setup, expansion, and commercial-contract answers sometimes grounded
+  themselves in unrelated excerpts
+- one commercial/vendor answer cited the Negotiable Instruments Act for a
+  broader contract-vetting task, which is not useful for end users
+
+After the notebook repair pass, the second benchmark produced:
 
 ```json
 {
@@ -80,6 +83,25 @@ Recent smoke-test behavior from the notebook:
   "total": 9
 }
 ```
+
+The repaired benchmark covered these probe categories:
+
+| Probe | Observed behavior after repair |
+|---|---|
+| Unsupported authority prediction | Refused to predict a court/government outcome and offered a safer source-summary/checklist path. |
+| Source/task mismatch | Correctly refused to use a Negotiable Instruments excerpt as the basis for a company setup pathway. |
+| Company setup | Returned source-supported setup points, broader checks requiring other sources, missing facts, citations, and disclaimer. |
+| Partnership/JV | Returned agreement drafting points, missing facts, Partnership Act citation, and expert-review framing. |
+| Expansion pathway | Flagged Bangladesh Bank/foreign-exchange relevance when the supplied source supported it and separated tax, licensing, BIDA/BEPZA/BEZA, employee-transfer, and stamp-duty checks as requiring other sources. |
+| Commercial contract vetting | Produced a vendor/supply/service-contract checklist around scope, acceptance, payment, warranty/support, liability, termination, records, dispute terms, and citations. |
+| Company policy vetting | Flagged blanket "all sales final/no refund/no warranty/no support/no escalation" language as review-required and suggested a clearer refund/return/warranty/service/complaint policy structure. |
+| Disciplinary timeline | Returned JSON and warned not to proceed without expert review, but the selected benchmark source was still legally adjacent rather than ideal labor-law grounding. |
+| Benchmark alignment | Returned the intended assistant rules: source-grounded, cautious, checklist/redline oriented, no invented approvals or predictions. |
+
+The important improvement is not just formatting. The second benchmark shows
+the adapter can now produce structured, source-aware exploration outputs across
+company setup, partnership/JV, expansion, commercial contract, refund/warranty/
+service policy, and labor-process probes without falling out of JSON.
 
 ## Intended Use
 
@@ -96,9 +118,13 @@ professional review. Suitable outputs include:
 ## Limitations
 
 This model is not a lawyer, tax adviser, immigration adviser, company secretary,
-or substitute for a qualified Bangladeshi professional. It may still select an
-overbroad or adjacent source when retrieval is weak. Production systems should
-use retrieval, source filtering, JSON validation, and human review.
+or substitute for a qualified Bangladeshi professional.
+
+The main remaining weakness is source selection, not JSON compliance. In the
+latest benchmark, the disciplinary-timeline probe produced a cautious answer but
+was grounded in a Contract Act excerpt instead of an ideal Labour Act/Rules
+excerpt. Production systems should therefore use retrieval, task/source filters,
+JSON validation, and human review before presenting outputs to end users.
 
 Do not use the model to make final legal, employment, investment, tax,
 immigration, regulatory, or court strategy decisions.
