@@ -22,18 +22,31 @@ def upload_with_commit_api(repo_id: str, card: str, token: str) -> str:
     """Upload README.md using the Hub commit API without extra dependencies."""
     with open(card, "rb") as f:
         encoded = base64.b64encode(f.read()).decode("ascii")
-    payload = json.dumps(
-        {
-            "summary": "Update model card",
-            "description": "Refresh README with intended use, training data, limitations, and smoke-test summary.",
-            "operations": [
+    payload = "\n".join(
+        [
+            json.dumps(
                 {
-                    "operation": "addOrUpdate",
-                    "path": "README.md",
-                    "content": encoded,
+                    "key": "header",
+                    "value": {
+                        "summary": "Update model card",
+                        "description": (
+                            "Refresh README with intended use, training data, "
+                            "limitations, and smoke-test summary."
+                        ),
+                    },
                 }
-            ],
-        }
+            ),
+            json.dumps(
+                {
+                    "key": "file",
+                    "value": {
+                        "path": "README.md",
+                        "content": encoded,
+                        "encoding": "base64",
+                    },
+                }
+            ),
+        ]
     ).encode("utf-8")
     req = urllib.request.Request(
         f"https://huggingface.co/api/models/{repo_id}/commit/main",
@@ -41,7 +54,7 @@ def upload_with_commit_api(repo_id: str, card: str, token: str) -> str:
         method="POST",
         headers={
             "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-ndjson",
         },
     )
     # Some local Windows Git/Python installs have stale CA config. This helper
